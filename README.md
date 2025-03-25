@@ -1,44 +1,28 @@
-# Default Starter Kit For TypeScript
+# fastly-streaming-poc
 
-[![Deploy to Fastly](https://deploy.edgecompute.app/button)](https://deploy.edgecompute.app/deploy)
+Node and npm required.
 
-Get to know the Fastly Compute environment with a basic starter that demonstrates routing, simple synthetic responses and code comments that cover common patterns.
+**Quick start**
 
-**For more details about other starter kits for Compute, see the [Fastly Documentation Hub](https://www.fastly.com/documentation/solutions/starters)**
+1. In one terminal
+1. `npm install`
+1. start test server: `node ./src/delayServer.js`
+1. In another terminal: `npm start`
+1. In yet another terminal: `curl "http://127.0.0.1:7676/?timeout=5000"`
 
-## Features
-* Allow only requests with particular HTTP methods
-* Match request URL path and methods for routing
-* Build synthetic responses at the edge
-
-## Understanding the code
-
-This starter is intentionally lightweight, and requires no dependencies aside from the [`@fastly/js-compute`](https://www.npmjs.com/package/@fastly/js-compute) npm package. It will help you understand the basics of processing requests at the edge using Fastly. This starter includes implementations of common patterns explained in our [using Compute](https://www.fastly.com/documentation/guides/compute/javascript/) and [VCL migration](https://www.fastly.com/documentation/guides/compute/migrate/) guides.
-
-The starter doesn't require the use of any backends. Once deployed, you will have a Fastly service running on Compute that can generate synthetic responses at the edge.
-
-The template uses TypeScript to compile source files in `./src` into JS files in `./build`, which are then wrapped into `./bin/index.wasm` using the `js-compute-runtime` CLI tool bundled with the `@fastly/js-compute` npm package, and bundled into a `.tar.gz` file ready for deployment to Compute.
-
-## Running the application
-
-To create an application using this starter kit, create a new directory for your application and switch to it, and then type the following command:
-
-```shell
-npm create @fastly/compute@latest -- --language=typescript --default-starter-kit
+You should see immediately:
 ```
-
-To build and run your new application in the local development environment, type the following command:
-
-```shell
-npm run start
+<!doctype html>
+<!-- stuff -->
 ```
-
-To build and deploy your application to your Fastly account, type the following command. The first time you deploy the application, you will be prompted to create a new service in your account.
-
-```shell
-npm run deploy
+Then, after 5 seconds, the rest of the response:
 ```
-
-## Security issues
-
-Please see our [SECURITY.md](SECURITY.md) for guidance on reporting security-related issues.
+<html>
+    <head><title>Delay Server</title></head>
+    <body>
+        <h1>Delay Server Response</h1>
+        <p>This response was delayed by 5000 milliseconds</p>
+        <p>To add a delay, add a 'timeout' query parameter to the URL (e.g., ?timeout=1000)</p>
+    </body>
+</html>
+```
