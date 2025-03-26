@@ -6,8 +6,7 @@ const logger = (start: number) => (message: string) => {
 };
 
 async function handler(event: FetchEvent) {
-    const clientReq = event.request;
-    const respPromise = fetch(clientReq, { backend: 'origin_0' });
+    const respPromise = fetch(event.request, { backend: 'origin_0' });
     return streamingResponse(event, respPromise);
 }
 
@@ -41,13 +40,12 @@ async function streamingResponse(
     });
 }
 
-// Returns a promise that will resolve when the entire stream is processed
 function streamProcessingPromise(
     writer: WritableStreamDefaultWriter,
     fetchPromise: Promise<Response>,
     log: (msg: string) => void
 ) {
-    // Create an async function to handle the stream processing
+    // Return a promise that will resolve when the entire stream is processed
     return new Promise<void>((resolve, reject) => {
         // Text to prepend to the stream - send this immediately before fetch completes
         const prependText = '<!doctype html>\n<!-- stuff -->\n';
@@ -80,17 +78,16 @@ function streamProcessingPromise(
                 // Pipe the original body to our writer
                 const reader = originalBody.getReader();
 
-                // Read and forward all chunks from the original response body
                 let count = 0;
-                // eslint-disable-next-line no-constant-condition
                 let keepReading = true;
                 while (keepReading) {
+                    // Read and forward all chunks from the original response body
                     const { done, value } = await reader.read();
                     if (done) {
                         log(`stream complete, closing writer`);
+                        keepReading = false;
                         await writer.close();
                         resolve();
-                        keepReading = false;
                         break;
                     }
                     if (count % 10 === 0) {
