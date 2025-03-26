@@ -30,7 +30,7 @@ async function streamingResponse(
     // This happens before the fetch completes, so the prepended text is sent right away
     return new Response(readable, {
         // We don't know the status yet, so use 200 OK as default
-        status: 222,
+        status: 200,
         statusText: 'OK',
         headers: {
             'Content-Type': 'text/html; charset=utf-8',
